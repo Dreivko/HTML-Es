@@ -5,13 +5,10 @@
     <%@include file="layouts/head.jsp" %>
     <body>
         <%@include file="layouts/header.jsp" %>
-        <section>
+        <section class="principal">
             <div>
-            HTML-Es
-            <br>
-            <br>
-            <br>
-            <div>
+            
+            <div class="message">
                 <% if(request.getAttribute("message") != null){ %>
                     <%= request.getAttribute("message")%>
                     <% System.out.println("index " + session); %>

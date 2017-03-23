@@ -63,10 +63,11 @@ public class Logout extends HttpServlet {
         
         request.setAttribute("message", "Cerro Sesion Exitosamente");
         System.out.println("Paso por aqui log out ");
-        response.sendRedirect("index.jsp");
         
-        //RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-        //dispatcher.forward(request, response);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+        dispatcher.forward(request, response);
+        //response.sendRedirect("index.jsp");
     }
 
     /**
