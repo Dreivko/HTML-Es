@@ -1,0 +1,59 @@
+/*Header*/
+header{
+    background-color: #EFF1F2;
+    color: #000000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 15%;
+}
+header div{
+    color: black;
+}
+
+header a{
+    font-size: 20px;
+    text-decoration: none;
+    color: black
+}
+.login{
+    position: absolute;
+    right: 0;
+    width: 35%;
+    height: 20%;
+    top: 20%;
+}
+.login ul li{
+    display: inline;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+
+/*body*/
+section{
+    position: absolute;
+    color: black;
+    background-color: #ccccff;
+    top: 15%;
+    left: 0;
+    width: 100%;
+    height: 80%;
+}
+
+div.login-form{
+    text-align: center;
+    background: #EFF1F2;
+}
+/*footer*/
+footer{
+    position: absolute;
+    color: black;
+    background-color: #00CC00;
+    top: 95%;
+    left: 0;
+    width: 100%;
+    height: 5%;
+    text-align: center;
+}
