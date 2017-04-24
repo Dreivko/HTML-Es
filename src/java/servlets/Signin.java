@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -94,27 +95,46 @@ public class Signin extends HttpServlet {
         String pass = request.getParameter("password");
 
         if (pass.length() < 7) {
-            
+
             request.setAttribute("message", "La Constraseña Debe Tener Minimo 8 Caracteres");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
             dispatcher.forward(request, response);
-            
-        } else {
-            String query = "INSERT INTO user values(" + id + ", " + '"' + name + '"' + ", " + '"' + username + '"' + "," + '"' + email + '"' + "," + '"' + pass + '"' + ");";
-            try {
-                System.out.println(query);
-                stmt = conn.createStatement();
-                stmt.executeUpdate(query);
-                request.setAttribute("message", "Registro Completado!");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-                dispatcher.forward(request, response);
-                //response.sendRedirect("index.jsp");
 
-            } catch (SQLException e) {
-                System.out.println("Tabla no existe o error " + e);
-            } catch (NullPointerException n) {
-                System.out.println(n);
+        } else {
+            String valid = String.valueOf(validChars());
+            int aprove = 0;
+
+            for (int c = 0; c < pass.length(); c++) {
+                for (int i = 0; i < valid.length(); i++) {
+                    if (valid.charAt(i) == pass.charAt(c)) {
+                        aprove++;
+                    }
+                }
             }
+            //System.out.println("chars aprove = " + aprove + " pass length is " + pass.length());
+            
+            if (aprove != pass.length()) {
+                request.setAttribute("message", "La contraseña solo puede tener letras o numeros");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+                dispatcher.forward(request, response);
+            }else {
+                String query = "INSERT INTO user values(" + id + ", " + '"' + name + '"' + ", " + '"' + username + '"' + "," + '"' + email + '"' + "," + '"' + pass + '"' + ");";
+                try {
+                    System.out.println(query);
+                    stmt = conn.createStatement();
+                    stmt.executeUpdate(query);
+                    request.setAttribute("message", "Registro Completado!");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+                    dispatcher.forward(request, response);
+                    //response.sendRedirect("index.jsp");
+
+                } catch (SQLException e) {
+                    System.out.println("Tabla no existe o error " + e);
+                } catch (NullPointerException n) {
+                    System.out.println(n);
+                }
+            }
+
         }
 
     }
@@ -144,6 +164,25 @@ public class Signin extends HttpServlet {
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("error al conectar " + e);
         }
+    }
+
+    public char[] validChars() {
+        char[] validChars = new char[62];
+        int index = 0;
+        for (char c = 'a'; c <= 'z'; c++) {
+            validChars[index] = c;
+            index++;
+        }
+        for (char c = 'A'; c <= 'Z'; c++) {
+            validChars[index] = c;
+            index++;
+        }
+        for (char c = '0'; c <= '9'; c++) {
+            validChars[index] = c;
+            index++;
+        }
+
+        return validChars;
     }
 
 }
