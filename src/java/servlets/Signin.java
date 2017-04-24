@@ -94,31 +94,98 @@ public class Signin extends HttpServlet {
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
 
-        if (pass.length() < 7) {
+        String valid = String.valueOf(validChars());
+        int aprovePass = 0;
+        int aproveName = 0;
+        int aproveUserName = 0;
+        int aproveEmail = 0;
+        
+        for (int c = 0; c < pass.length(); c++) {
+            for (int i = 0; i < valid.length(); i++) {
+                if (valid.charAt(i) == pass.charAt(c)) {
+                    aprovePass++;
+                }
+            }
+        }
+
+        for (int c = 0; c < name.length(); c++) {
+            for (int i = 0; i < valid.length(); i++) {
+                if (valid.charAt(i) == name.charAt(c)) {
+                    aproveName++;
+                }
+            }
+        }
+
+        for (int c = 0; c < username.length(); c++) {
+            for (int i = 0; i < valid.length(); i++) {
+                if (valid.charAt(i) == username.charAt(c)) {
+                    aproveUserName++;
+                }
+            }
+        }
+        
+        for (int c = 0; c < email.length(); c++) {
+            for (int i = 0; i < valid.length(); i++) {
+                if (valid.charAt(i) == email.charAt(c)) {
+                    aproveEmail++;
+                }
+            }
+        }
+        if(email.contains("@") && email.contains(".")){
+            aproveEmail = aproveEmail + 2;
+        }
+        
+
+        if ("".equals(name) || name == null) {
+
+            request.setAttribute("message", "El Nombre no puede estar vacio");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else if (name.length() != aproveName) {
+
+            request.setAttribute("message", "El Nombre tiene caracteres invalidos");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else if ("".equals(username) || username == null) {
+
+            request.setAttribute("message", "El Nombre de usuario no puede estar vacio");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else if (username.length() != aproveName) {
+
+            request.setAttribute("message", "El Nombre de usuario tiene caracteres invalidos");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else if ( !(email.contains("@") && email.contains(".")) ) {
+                
+            request.setAttribute("message", "El Email no es valido");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else if ( email.length() != aproveEmail ) {
+                
+            request.setAttribute("message", "El Email tiene caracteres no validos");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else if (pass.length() < 7) {
 
             request.setAttribute("message", "La Constraseña Debe Tener Minimo 8 Caracteres");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
             dispatcher.forward(request, response);
 
-        } else {
-            String valid = String.valueOf(validChars());
-            int aprove = 0;
+        } else if (aprovePass != pass.length()) {
 
-            for (int c = 0; c < pass.length(); c++) {
-                for (int i = 0; i < valid.length(); i++) {
-                    if (valid.charAt(i) == pass.charAt(c)) {
-                        aprove++;
-                    }
-                }
-            }
-            //System.out.println("chars aprove = " + aprove + " pass length is " + pass.length());
-            
-            if (aprove != pass.length()) {
-                request.setAttribute("message", "La contraseña solo puede tener letras o numeros");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
-                dispatcher.forward(request, response);
-            }else {
-                String query = "INSERT INTO user values(" + id + ", " + '"' + name + '"' + ", " + '"' + username + '"' + "," + '"' + email + '"' + "," + '"' + pass + '"' + ");";
+            request.setAttribute("message", "La contraseña solo puede tener letras o numeros");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
+            dispatcher.forward(request, response);
+
+        } else {
+            String query = "INSERT INTO user values(" + id + ", " + '"' + name + '"' + ", " + '"' + username + '"' + "," + '"' + email + '"' + "," + '"' + pass + '"' + ");";
                 try {
                     System.out.println(query);
                     stmt = conn.createStatement();
@@ -133,8 +200,6 @@ public class Signin extends HttpServlet {
                 } catch (NullPointerException n) {
                     System.out.println(n);
                 }
-            }
-
         }
 
     }
