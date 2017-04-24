@@ -25,10 +25,10 @@
             <%} else if (request.getSession(false) != null) {%>
             <li>
                 <div class="dropdown">
-                    <button onclick="dropdown()" class="dropbtn">Perfil</button>
+                    <button onclick="dropdown()" class="dropbtn"> Mas </button>
                         <div id="myDropdown" class="dropdown-content">
                             <a href="Profile.jsp" title="Perfil" >
-                                Personal
+                                Perfil
                             </a>
                             <a href="Logout" title="Salir" >
                                 Salir
