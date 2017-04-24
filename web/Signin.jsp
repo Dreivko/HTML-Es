@@ -11,6 +11,12 @@
     <body>
         <%@include file="layouts/header.jsp" %>
         <section>
+            <% if (request.getAttribute("message") != null) {%>
+            <%= request.getAttribute("message")%>
+            <br>
+            <br>
+            <br>
+            <% };%>
             <div class="signin-form">
                 <img src="img/registrate.png">
                 <table>
