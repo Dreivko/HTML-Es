@@ -125,11 +125,12 @@ section{
     width: 100%;
     height: 80%;
 }
+/*
 section.principal{
     background-image: url(../img/bienvenido.jpg);
     background-repeat: no-repeat;
     background-size:  cover;
-}
+}*/
 
 div.login-form{
     text-align: center;
@@ -278,6 +279,21 @@ li.slide-current{
         height: 160px;
     }
 }
+/*Progress Bar*/
+#myProgress {
+    width: 100%;
+    background-color: grey;
+}
+
+#myBar {
+    width: 1%;
+    height: 30px;
+    background-color: #00ccff;
+    text-align: center; 
+    line-height: 30px; 
+    color: white; 
+}
+
 
 
 /*footer*/
