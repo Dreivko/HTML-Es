@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <header>
     <div>
-            HTML-Es LOGO
+          <img src="img/HTML5_1Color_White.png" >
     </div>
     <div class="login">
         <ul>
