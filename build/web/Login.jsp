@@ -6,17 +6,17 @@
     <body>
         <%@include file="layouts/header.jsp" %>
         <section>
-            <div class="login-form">
-                <img src="img/login.png">
+             <div class="container">
+                <img src="img/person.png">
                 <table>
                     <form action="Login" method="post" >
                         <tr>
-                            <td><label for="name">Nombre:</label></td>
-                            <td><input type="text" name="name"></td><br>
+                            <td><label></label></td>
+                            <td><input type="text" name="name" placeholder="Ingresa Nombre"></td><br>
                         </tr>
                         <tr>
-                            <td><label for="password">Contraseña:</label></td>
-                            <td><input type="password" name="password"></td><br>
+                            <td><label></label></td>
+                            <td><input type="password" name="password" placeholder="Ingresa Contraseña"></td><br>
                         </tr>
                         <tr>
                             <td></td>

@@ -17,30 +17,33 @@
             <br>
             <br>
             <% };%>
-            <div class="signin-form">
-                <img src="img/registrate.png">
+             <div class="containersign">
+                   <img src="img/register.png">
+               
                 <table>
                     <form action="Signin" method="post" >
                         <tr>
-                            <td><label for="name">Nombre:</label></td>
-                            <td><input type="text" name="name"></td><br>
+                          <td><label></label></td>
+                            <td><input type="text" name="name" placeholder="Nombre"></td><br>
                         </tr>
                         <tr>
-                            <td><label for="name">Nombre de Usuario:</label></td>
-                            <td><input type="text" name="username"></td><br>
+                         <td><label></label></td>
+                            <td><input type="text" name="username"placeholder="Nombre de Usuario"></td><br>
                         </tr>
                         <tr>
-                            <td><label for="name">Email:</label></td>
-                            <td><input type="text" name="email"></td><br>
+                          <td><label></label></td>
+                            <td><input type="text" name="email"placeholder="Correo Electronico"></td><br>
                         </tr>
                         <tr>
-                            <td><label for="password">Contraseña:</label></td>
-                            <td><input type="password" name="password"></td><br>
+                          <td><label></label></td>
+                            <td><input type="password" name="password"placeholder="Constraseña"></td><br>
                         </tr>
                         <tr>
                             <td></td>
+                            
                             <td><input type="submit" value="Registrarse"></td>
-                        </tr>    
+                        </tr> 
+                      
                     </form>
             </table>
         </div>
