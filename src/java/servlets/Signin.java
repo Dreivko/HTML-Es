@@ -7,6 +7,9 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -95,37 +98,14 @@ public class Signin extends HttpServlet {
         String pass = request.getParameter("password");
 
         String valid = String.valueOf(validChars());
-        int aprovePass = 0;
-        int aproveName = 0;
-        int aproveUserName = 0;
+        int aprovePass = approvation(valid, pass);
+        int aproveName = approvation(valid, name);
+        int aproveUserName = approvation(valid, username);
         int aproveEmail = 0;
         
-        for (int c = 0; c < pass.length(); c++) {
-            for (int i = 0; i < valid.length(); i++) {
-                if (valid.charAt(i) == pass.charAt(c)) {
-                    aprovePass++;
-                }
-            }
-        }
-
-        for (int c = 0; c < name.length(); c++) {
-            for (int i = 0; i < valid.length(); i++) {
-                if (valid.charAt(i) == name.charAt(c)) {
-                    aproveName++;
-                }
-            }
-        }
-
-        for (int c = 0; c < username.length(); c++) {
-            for (int i = 0; i < valid.length(); i++) {
-                if (valid.charAt(i) == username.charAt(c)) {
-                    aproveUserName++;
-                }
-            }
-        }
         
         for (int c = 0; c < email.length(); c++) {
-            for (int i = 0; i < valid.length(); i++) {
+            for (int i = 1; i < valid.length(); i++) {
                 if (valid.charAt(i) == email.charAt(c)) {
                     aproveEmail++;
                 }
@@ -154,8 +134,8 @@ public class Signin extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
             dispatcher.forward(request, response);
 
-        } else if (username.length() != aproveName) {
-
+        } else if (username.length() != aproveUserName) {
+            
             request.setAttribute("message", "El Nombre de usuario tiene caracteres invalidos");
             RequestDispatcher dispatcher = request.getRequestDispatcher("Signin.jsp");
             dispatcher.forward(request, response);
@@ -185,21 +165,35 @@ public class Signin extends HttpServlet {
             dispatcher.forward(request, response);
 
         } else {
-            String query = "INSERT INTO user values(" + id + ", " + '"' + name + '"' + ", " + '"' + username + '"' + "," + '"' + email + '"' + "," + '"' + pass + '"' + ");";
+            if(userExiste(stmt,username,email)){
+                request.setAttribute("message", "Nombre de usuario o el Email ya estan tomados");
+                System.out.println("Paso por aqui log in false");
+                //response.sendRedirect("index.jsp");
+            
+                RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+                dispatcher.forward(request, response);
+            }else{
                 try {
-                    System.out.println(query);
-                    stmt = conn.createStatement();
-                    stmt.executeUpdate(query);
-                    request.setAttribute("message", "Registro Completado!");
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-                    dispatcher.forward(request, response);
-                    //response.sendRedirect("index.jsp");
-
-                } catch (SQLException e) {
-                    System.out.println("Tabla no existe o error " + e);
-                } catch (NullPointerException n) {
-                    System.out.println(n);
+                    pass = encrypt(pass);
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(Signin.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                String query = "INSERT INTO user values(" + id + ", " + '"' + name + '"' + ", " + '"' + username + '"' + "," + '"' + email + '"' + "," + '"' + pass + '"' + ");";
+                    try {
+                        System.out.println(query);
+                        stmt = conn.createStatement();
+                        stmt.executeUpdate(query);
+                        request.setAttribute("message", "Registro Completado!");
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+                        dispatcher.forward(request, response);
+                        //response.sendRedirect("index.jsp");
+
+                    } catch (SQLException e) {
+                        System.out.println("Tabla no existe o error " + e);
+                    } catch (NullPointerException n) {
+                        System.out.println(n);
+                    }
+            }
         }
 
     }
@@ -232,8 +226,9 @@ public class Signin extends HttpServlet {
     }
 
     public char[] validChars() {
-        char[] validChars = new char[62];
-        int index = 0;
+        char[] validChars = new char[63];
+        validChars[0] = ' ';
+        int index = 1;
         for (char c = 'a'; c <= 'z'; c++) {
             validChars[index] = c;
             index++;
@@ -248,6 +243,62 @@ public class Signin extends HttpServlet {
         }
 
         return validChars;
+    }
+    
+    public int approvation(String valid, String param){
+        int approve = 0;
+        for (int c = 0; c < param.length(); c++) {
+            for (int i = 0; i < valid.length(); i++) {
+                if (valid.charAt(i) == param.charAt(c)) {
+                    approve++;
+                }
+            }
+        }
+        System.out.println("paso por aqui     " + approve );
+        return approve;
+        
+    }
+    
+    
+    public Boolean userExiste(Statement stmt, String username, String email){
+        boolean exists = false;
+        String query = "SELECT * FROM user where username=" + "'" + username + "'" + " OR email =" + "'" + email + "'"+ ";";
+                try {
+                    System.out.println(query);
+                    stmt = conn.createStatement();
+                    
+                    if(stmt.executeQuery(query).next() == true){
+                        exists = true;
+                        System.out.println("Ya existe");
+                    }else{
+                        exists = false;
+                    }
+
+                } catch (SQLException e) {
+                    System.out.println("Tabla no existe o error " + e);
+                } catch (NullPointerException n) {
+                    System.out.println(n);
+                }
+        
+        
+        
+        
+        return exists;
+    
+    }
+    
+    public String encrypt(String param) throws NoSuchAlgorithmException{
+        String plaintext = param;
+        MessageDigest m = MessageDigest.getInstance("MD5");
+        m.reset();
+        m.update(plaintext.getBytes());
+        byte[] digest = m.digest();
+        BigInteger bigInt = new BigInteger(1,digest);
+        String hashtext = bigInt.toString(16);
+        while(hashtext.length() < 32 ){
+            hashtext = "0"+hashtext;
+        }
+        return hashtext;
     }
 
 }

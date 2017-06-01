@@ -7,10 +7,15 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -91,6 +96,11 @@ public class Login extends HttpServlet {
         
         System.out.println("\n\n\n\n\n"+name);
         System.out.println(pass);
+        try {
+            pass = encrypt(pass);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         String query = "SELECT * FROM user where (name=" + '"' + name + '"' + " OR username = "+'"'+ name +'"' + " ) AND pass =" + '"' + pass + '"' + ";";
         try {
@@ -156,5 +166,19 @@ public class Login extends HttpServlet {
 	}catch(ClassNotFoundException | SQLException e) { 
             System.out.println("error al conectar " + e);
 	}
+    }
+    
+    public String encrypt(String param) throws NoSuchAlgorithmException{
+        String plaintext = param;
+        MessageDigest m = MessageDigest.getInstance("MD5");
+        m.reset();
+        m.update(plaintext.getBytes());
+        byte[] digest = m.digest();
+        BigInteger bigInt = new BigInteger(1,digest);
+        String hashtext = bigInt.toString(16);
+        while(hashtext.length() < 32 ){
+            hashtext = "0"+hashtext;
+        }
+        return hashtext;
     }
 }
