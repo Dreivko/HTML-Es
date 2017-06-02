@@ -20,5 +20,6 @@
     <script src="/scripts/bootstrap-3.3.7/dist/js/npm.js"></script>-->
     <!-- Lastest Jquery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="/scripts/jquery.js"></script>
+    <script src="../scripts/jquery.js"></script>
+    <script src="../js/songun.js"></script>
 </head>

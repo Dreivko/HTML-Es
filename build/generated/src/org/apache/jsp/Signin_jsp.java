@@ -76,7 +76,8 @@ public final class Signin_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    <script src=\"/scripts/bootstrap-3.3.7/dist/js/npm.js\"></script>-->\r\n");
       out.write("    <!-- Lastest Jquery -->\r\n");
       out.write("    <script src=\"https://code.jquery.com/jquery-3.1.1.min.js\"></script>\r\n");
-      out.write("    <script src=\"/scripts/jquery.js\"></script>\r\n");
+      out.write("    <script src=\"../scripts/jquery.js\"></script>\r\n");
+      out.write("    <script src=\"../js/songun.js\"></script>\r\n");
       out.write("</head>\r\n");
       out.write("\r\n");
       out.write("    <body>\r\n");
